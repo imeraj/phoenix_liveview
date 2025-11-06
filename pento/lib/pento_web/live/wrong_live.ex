@@ -2,7 +2,9 @@ defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, score: 0, message: "Make a guess: ")}
+    user = socket.assigns.current_scope.user
+
+    {:ok, assign(socket, score: 0, message: "Make a guess: ", current_user: user)}
   end
 
   def handle_event("guess", %{"number" => guess}, socket) do
@@ -28,6 +30,9 @@ defmodule PentoWeb.WrongLive do
             {n}
           </.link>
         <% end %>
+      </h2>
+      <h2>
+        {@current_user.email}
       </h2>
     </main>
     """
