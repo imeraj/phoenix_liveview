@@ -6,7 +6,25 @@ defmodule Pento.Accounts do
   import Ecto.Query, warn: false
   alias Pento.Repo
 
-  alias Pento.Accounts.{User, UserToken, UserNotifier}
+  alias Pento.Accounts.{User, UserToken, UserNotifier, Scope}
+
+  ## Scope helpers
+
+  @doc """
+  Gets a scope for the given user ID.
+
+  ## Examples
+
+      iex> get_scope_for_user(123)
+      %Pento.Accounts.Scope{user: %User{}}
+
+      iex> get_scope_for_user(999)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_scope_for_user(user_id) when is_integer(user_id) do
+    get_user!(user_id) |> Scope.for_user()
+  end
 
   ## Database getters
 
