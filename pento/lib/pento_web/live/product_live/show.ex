@@ -26,6 +26,7 @@ defmodule PentoWeb.ProductLive.Show do
         <:item title="Unit price">{@product.unit_price}</:item>
         <:item title="Sku">{@product.sku}</:item>
       </.list>
+      <img alt="product image" width="100" src={@product.image_upload} />
     </Layouts.app>
     """
   end
