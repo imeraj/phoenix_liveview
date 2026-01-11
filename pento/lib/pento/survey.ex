@@ -283,4 +283,15 @@ defmodule Pento.Survey do
 
     Rating.changeset(rating, attrs, scope)
   end
+
+  @doc """
+  Gets a demographic for the given user scope.
+
+  Returns `nil` if no demographic exists for the user.
+  """
+  def get_demographic_by_user(%Scope{} = scope) do
+    Demographic.Query.base()
+    |> Demographic.Query.for_user(scope)
+    |> Repo.one()
+  end
 end
