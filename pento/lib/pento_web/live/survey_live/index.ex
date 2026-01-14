@@ -17,7 +17,7 @@ defmodule PentoWeb.SurveyLive.Index do
         <%= if @demographic do %>
           <DemographicLive.Show.details demographic={@demographic} />
         <% else %>
-          <h3>Demographic form coming soon...</h3>
+          <.live_component module={DemographicLive.Form} id="demographic-form" current_scope={@current_scope} />
         <% end %>
       </div>
     </Layouts.app>
@@ -32,6 +32,18 @@ defmodule PentoWeb.SurveyLive.Index do
       |> assign_products()
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_info({:created_demographic, demographic}, socket) do
+    socket = handle_demographc_created(socket, demographic)
+    {:noreply, socket}
+  end
+
+  def handle_demographc_created(socket, demographic) do
+    socket
+    |> put_flash(:info, "Demographic created successfully")
+    |> assign_demographic()
   end
 
   defp assign_demographic(socket) do
