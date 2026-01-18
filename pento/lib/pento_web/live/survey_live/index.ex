@@ -5,6 +5,7 @@ defmodule PentoWeb.SurveyLive.Index do
   alias Pento.Survey
   alias PentoWeb.SurveyLive.Component
   alias PentoWeb.DemographicLive
+  alias PentoWeb.RatingLive
 
   @impl true
   def render(assigns) do
@@ -16,6 +17,9 @@ defmodule PentoWeb.SurveyLive.Index do
       <div class="container mx-auto px-4 py-8 max-w-4xl">
         <%= if @demographic do %>
           <DemographicLive.Show.details demographic={@demographic} />
+          <RatingLive.Index.product_list
+            products={@products}
+            current_scope={@current_scope} />
         <% else %>
           <.live_component module={DemographicLive.Form} id="demographic-form" current_scope={@current_scope} />
         <% end %>
@@ -40,10 +44,25 @@ defmodule PentoWeb.SurveyLive.Index do
     {:noreply, socket}
   end
 
-  def handle_demographc_created(socket, demographic) do
+  @impl true
+  def handle_info({:created_rating, product, product_index}, socket) do
+    socket = handle_rating_created(socket, product, product_index)
+    {:noreply, socket}
+  end
+
+  defp handle_demographc_created(socket, demographic) do
     socket
     |> put_flash(:info, "Demographic created successfully")
-    |> assign_demographic()
+    |> assign(:demographic, demographic)
+  end
+
+  defp handle_rating_created(socket, product, product_index) do
+    current_products = socket.assigns.products
+    products = List.replace_at(current_products, product_index, product)
+
+    socket
+    |> put_flash(:info, "Rating created successfully")
+    |> assign(:products, products)
   end
 
   defp assign_demographic(socket) do
@@ -52,7 +71,7 @@ defmodule PentoWeb.SurveyLive.Index do
   end
 
   defp assign_products(socket) do
-    products = Catalog.list_products(socket.assigns.current_scope)
+    products = Catalog.list_products_with_user_ratings(socket.assigns.current_scope)
     assign(socket, :products, products)
   end
 end
