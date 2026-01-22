@@ -45,6 +45,9 @@ defmodule PentoWeb.Layouts do
       <div class="flex-none">
         <ul class="flex flex-column px-1 space-x-4 items-center">
           <li>
+            <.link navigate={~p"/admin/dashboard"} class="btn btn-ghost">Dashboard</.link>
+          </li>
+          <li>
             <.link navigate={~p"/products"} class="btn btn-ghost">Products</.link>
           </li>
           <li>

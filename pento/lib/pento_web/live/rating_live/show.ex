@@ -2,8 +2,6 @@ defmodule PentoWeb.RatingLive.Show do
   @moduledoc false
   use Phoenix.Component
 
-  alias PentoWeb.RatingLive
-
   attr(:rating, :map, required: true)
 
   def stars(assigns) do

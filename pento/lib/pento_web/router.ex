@@ -65,6 +65,8 @@ defmodule PentoWeb.Router do
       live("/products/:id/edit", ProductLive.Form, :edit)
 
       live("/survey", SurveyLive.Index, :index)
+
+      live("/admin/dashboard", Admin.DashboardLive.Index, :index)
     end
 
     post("/users/update-password", UserSessionController, :update_password)
