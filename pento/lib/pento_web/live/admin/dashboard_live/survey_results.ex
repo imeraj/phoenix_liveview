@@ -37,7 +37,7 @@ defmodule PentoWeb.Admin.DashboardLive.SurveyResults do
     assign(
       socket,
       :products_with_average_ratings,
-      Catalog.products_with_average_ratings(%{age_group_filter: age_group_filter})
+      Catalog.get_products_with_average_ratings(age_group_filter)
     )
   end
 
