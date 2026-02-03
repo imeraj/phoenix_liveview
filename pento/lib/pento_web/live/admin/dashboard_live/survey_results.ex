@@ -3,8 +3,6 @@ defmodule PentoWeb.Admin.DashboardLive.SurveyResults do
 
   use PentoWeb, :live_component
 
-  alias Erl2exVendored.Pipeline.Codegen.Context
-  alias ElixirLS.LanguageServer.Parser.Context
   alias Pento.Catalog
   alias Contex.Plot
 
@@ -12,14 +10,35 @@ defmodule PentoWeb.Admin.DashboardLive.SurveyResults do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign_age_group_filter()
      |> assign_products_with_average_ratings()
      |> assign_dataset()
      |> assign_chart()
      |> assign_chart_svg()}
   end
 
-  defp assign_products_with_average_ratings(socket) do
-    assign(socket, :products_with_average_ratings, Catalog.products_with_average_ratings())
+  def handle_event("age_group_filter", %{"age_group_filter" => age_group}, socket) do
+    {:noreply,
+     socket
+     |> assign_age_group_filter(age_group)
+     |> assign_products_with_average_ratings()
+     |> assign_dataset()
+     |> assign_chart()
+     |> assign_chart_svg()}
+  end
+
+  defp assign_age_group_filter(socket, age_group \\ "all") do
+    assign(socket, :age_group_filter, age_group)
+  end
+
+  defp assign_products_with_average_ratings(
+         %{assigns: %{age_group_filter: age_group_filter}} = socket
+       ) do
+    assign(
+      socket,
+      :products_with_average_ratings,
+      Catalog.products_with_average_ratings(%{age_group_filter: age_group_filter})
+    )
   end
 
   defp assign_dataset(
